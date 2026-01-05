@@ -8,9 +8,13 @@ export const About: React.FC = () => {
     <div className="bg-white dark:bg-[#050505] text-gray-900 dark:text-white pt-32 pb-24 overflow-hidden">
       {/* Hero Section */}
       <SectionWrapper className="max-w-5xl mx-auto px-6 text-center mb-32">
-        <span className="text-yellow-600 uppercase tracking-[0.5em] text-[10px] font-bold mb-6 block">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-yellow-600 uppercase tracking-[0.5em] text-[10px] font-bold mb-6 block"
+        >
           Our Ethos
-        </span>
+        </motion.span>
         <h1 className="text-6xl md:text-9xl font-serif mb-10 leading-[0.85] tracking-tighter">
           Cinematic Soul, <br />
           <span className="italic">Timeless Frame.</span>
@@ -25,15 +29,24 @@ export const About: React.FC = () => {
       <section className="max-w-7xl mx-auto px-6 mb-48">
         <div className="grid md:grid-cols-2 gap-24 items-center">
           <SectionWrapper direction="left">
-            <div className="aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl relative group">
-              <img
+            {/* MOBILE OPTIMIZATION: whileInView automatically removes grayscale as the user scrolls to the image */}
+            <motion.div
+              whileTap={{ scale: 0.98 }}
+              className="aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl relative cursor-pointer"
+            >
+              <motion.img
+                initial={{ filter: "grayscale(100%)", scale: 1 }}
+                whileInView={{ filter: "grayscale(0%)", scale: 1.05 }}
+                viewport={{ once: false, amount: 0.4 }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
                 src="https://i.pinimg.com/736x/f5/94/d1/f594d17e5bcd98234cd36a48f5b56a9a.jpg"
                 alt="Architecture"
-                className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+            </motion.div>
           </SectionWrapper>
+
           <SectionWrapper direction="right">
             <h2 className="text-4xl md:text-6xl font-serif mb-8 leading-tight">
               Beyond the <br />
@@ -50,6 +63,7 @@ export const About: React.FC = () => {
               events; we capture the visual frequency that makes your connection
               one of a kind.
             </p>
+
             <div className="mt-12 flex gap-8 border-t border-gray-100 dark:border-white/10 pt-12">
               <div>
                 <p className="text-3xl font-serif italic mb-1">500+</p>
@@ -79,6 +93,7 @@ export const About: React.FC = () => {
               The Weddingwit Standard
             </p>
           </SectionWrapper>
+
           <div className="grid md:grid-cols-3 gap-12">
             {[
               {
@@ -95,14 +110,22 @@ export const About: React.FC = () => {
               },
             ].map((pillar, i) => (
               <SectionWrapper key={i} delay={i * 0.15}>
-                <div className="p-12 glass rounded-[3rem] border border-white/10 h-full hover:bg-white/10 transition-all duration-700">
+                {/* MOBILE OPTIMIZATION: whileTap provides haptic-like visual feedback on mobile touch */}
+                <motion.div
+                  whileHover={{
+                    y: -10,
+                    backgroundColor: "rgba(255, 255, 255, 0.08)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-12 glass rounded-[3rem] border border-white/10 h-full transition-colors duration-500 cursor-pointer"
+                >
                   <h4 className="text-3xl font-serif italic mb-6 text-yellow-600">
                     {pillar.title}
                   </h4>
                   <p className="text-gray-500 dark:text-gray-300 font-light leading-relaxed">
                     {pillar.desc}
                   </p>
-                </div>
+                </motion.div>
               </SectionWrapper>
             ))}
           </div>
@@ -134,7 +157,13 @@ export const About: React.FC = () => {
                   desc: "Our end goal is an archive that remains as evocative fifty years from now as it is today.",
                 },
               ].map((item, i) => (
-                <div key={i} className="flex gap-8 group">
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0.5 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ amount: 0.8 }}
+                  className="flex gap-8 group cursor-default"
+                >
                   <span className="text-2xl font-serif italic text-yellow-600/40 group-hover:text-yellow-600 transition-colors">
                     {item.step}
                   </span>
@@ -146,26 +175,37 @@ export const About: React.FC = () => {
                       {item.desc}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </SectionWrapper>
+
           <SectionWrapper direction="right" className="order-1 md:order-2">
             <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-[4/5] rounded-[2rem] overflow-hidden translate-y-12">
+              <motion.div
+                whileInView={{ y: 0, opacity: 1 }}
+                initial={{ y: 40, opacity: 0 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="aspect-[4/5] rounded-[2rem] overflow-hidden translate-y-12 shadow-xl"
+              >
                 <img
                   src="https://i.pinimg.com/736x/79/21/c2/7921c220ea25456868c005d8b4ef808c.jpg"
                   alt="Detail 1"
                   className="w-full h-full object-cover"
                 />
-              </div>
-              <div className="aspect-[4/5] rounded-[2rem] overflow-hidden">
+              </motion.div>
+              <motion.div
+                whileInView={{ y: 0, opacity: 1 }}
+                initial={{ y: -40, opacity: 0 }}
+                transition={{ duration: 1, delay: 0.4 }}
+                className="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-xl"
+              >
                 <img
                   src="https://i.pinimg.com/736x/5f/0e/07/5f0e070f0f88e6d9b78179f74267025a.jpg"
                   alt="Detail 2"
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </motion.div>
             </div>
           </SectionWrapper>
         </div>
@@ -179,13 +219,13 @@ export const About: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
           <Link
             to="/gallery"
-            className="px-12 py-5 rounded-full bg-yellow-600 text-white uppercase tracking-[0.2em] text-[10px] font-bold glow-button"
+            className="px-12 py-5 rounded-full bg-yellow-600 text-white uppercase tracking-[0.2em] text-[10px] font-bold shadow-lg active:scale-95 transition-transform"
           >
             The Portfolio
           </Link>
           <Link
             to="/book"
-            className="px-12 py-5 rounded-full border border-gray-200 dark:border-white/10 uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+            className="px-12 py-5 rounded-full border border-gray-200 dark:border-white/10 uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all"
           >
             Book a Consultation
           </Link>

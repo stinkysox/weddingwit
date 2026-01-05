@@ -16,6 +16,22 @@ const CATEGORIES: (GalleryCategory | "All")[] = [
   "Other",
 ];
 
+// Animation Variants for the Overlay
+const overlayVariants = {
+  initial: { opacity: 0, backdropFilter: "blur(0px)" },
+  animate: {
+    opacity: 1,
+    backdropFilter: "blur(4px)",
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
+  exit: { opacity: 0, backdropFilter: "blur(0px)" },
+};
+
+const textVariants = {
+  initial: { y: 20, opacity: 0 },
+  animate: { y: 0, opacity: 1, transition: { delay: 0.1, duration: 0.4 } },
+};
+
 export const Gallery: React.FC = () => {
   const [filter, setFilter] = useState<GalleryCategory | "All">("All");
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
@@ -36,17 +52,18 @@ export const Gallery: React.FC = () => {
 
         <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
           {CATEGORIES.map((cat) => (
-            <button
+            <motion.button
               key={cat}
+              whileTap={{ scale: 0.95 }} // Visual feedback for mobile taps
               onClick={() => setFilter(cat)}
               className={`px-8 py-3 rounded-full border text-[10px] uppercase tracking-[0.2em] transition-all duration-500 font-bold ${
                 filter === cat
-                  ? "bg-black text-white border-black dark:bg-white dark:text-black shadow-xl scale-105"
+                  ? "bg-black text-white border-black dark:bg-white dark:text-black shadow-xl"
                   : "border-gray-200 dark:border-white/10 text-gray-400 hover:border-yellow-600 hover:text-yellow-600"
               }`}
             >
               {cat}
-            </button>
+            </motion.button>
           ))}
         </div>
       </SectionWrapper>
@@ -69,35 +86,28 @@ export const Gallery: React.FC = () => {
                   <motion.div
                     key={item.id}
                     layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.5 }}
                     className="break-inside-avoid"
                   >
-                    <div className="group relative overflow-hidden rounded-3xl glass-light border border-black/5 dark:border-white/5 shadow-sm">
+                    {/* MOBILE FIX: whileHover handles Desktop, whileTap handles Mobile.
+                       The "initial", "whileHover", and "whileTap" props propagate 
+                       down to the child motion components.
+                    */}
+                    <motion.div
+                      className="group relative overflow-hidden rounded-3xl glass-light border border-black/5 dark:border-white/5 shadow-sm cursor-pointer"
+                      initial="initial"
+                      whileHover="animate"
+                      whileTap="animate"
+                    >
                       {/* Shimmer Placeholder */}
                       {!isLoaded && (
-                        <div
-                          className="
-                            absolute inset-0 rounded-3xl
-                            bg-gradient-to-r
-                            from-white/5 via-white/15 to-white/5
-                            dark:from-white/3 dark:via-white/10 dark:to-white/3
-                            bg-[length:200%_100%]
-                            animate-[shimmer_1.6s_ease-in-out_infinite]
-                          "
-                          style={{
-                            animationName: "shimmer",
-                            animationTimingFunction: "ease-in-out",
-                            animationIterationCount: "infinite",
-                            animationDuration: "1.6s",
-                            backgroundPosition: "0% 0%",
-                          }}
-                        />
+                        <div className="absolute inset-0 rounded-3xl bg-gray-100 dark:bg-white/5 animate-pulse" />
                       )}
 
-                      <img
+                      <motion.img
                         src={item.imageUrl}
                         alt={item.title}
                         onLoad={() =>
@@ -106,26 +116,41 @@ export const Gallery: React.FC = () => {
                             [item.id]: true,
                           }))
                         }
-                        className={`w-full object-cover transition-all duration-700 ${
-                          isLoaded
-                            ? "opacity-100 scale-100"
-                            : "opacity-0 scale-105"
+                        variants={{
+                          initial: { scale: 1 },
+                          animate: { scale: 1.05 },
+                        }}
+                        transition={{ duration: 0.8 }}
+                        className={`w-full object-cover transition-opacity duration-700 ${
+                          isLoaded ? "opacity-100" : "opacity-0"
                         }`}
                       />
 
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-700 p-10 flex flex-col justify-end backdrop-blur-[2px]">
-                        <p className="text-yellow-600 uppercase text-[10px] tracking-[0.3em] font-bold mb-4">
+                      {/* Hover/Tap Overlay using Framer Motion instead of CSS group-hover */}
+                      <motion.div
+                        variants={overlayVariants}
+                        className="absolute inset-0 bg-black/70 p-10 flex flex-col justify-end"
+                      >
+                        <motion.p
+                          variants={textVariants}
+                          className="text-yellow-600 uppercase text-[10px] tracking-[0.3em] font-bold mb-4"
+                        >
                           {item.category}
-                        </p>
-                        <h3 className="text-3xl font-serif text-white mb-3 tracking-tight">
+                        </motion.p>
+                        <motion.h3
+                          variants={textVariants}
+                          className="text-3xl font-serif text-white mb-3 tracking-tight"
+                        >
                           {item.title}
-                        </h3>
-                        <p className="text-white/60 text-xs italic leading-relaxed max-w-[200px]">
+                        </motion.h3>
+                        <motion.p
+                          variants={textVariants}
+                          className="text-white/60 text-xs italic leading-relaxed max-w-[200px]"
+                        >
                           {item.description}
-                        </p>
-                      </div>
-                    </div>
+                        </motion.p>
+                      </motion.div>
+                    </motion.div>
                   </motion.div>
                 );
               })}
