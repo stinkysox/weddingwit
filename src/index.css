@@ -6,6 +6,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Removes the blue highlight block when tapping on mobile */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -14,6 +16,15 @@
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.7s cubic-bezier(0.4, 0, 0.2, 1),
       color 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Disables text selection and copy/paste popups across the site */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* Prevents the system context menu on long-press (iOS) */
+    -webkit-touch-callout: none;
   }
 
   h1,
@@ -27,6 +38,13 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Specifically protect images from being "Saved" or "Opened in New Tab" on long-press */
+  img {
+    -webkit-touch-callout: none;
+    user-drag: none;
+    -webkit-user-drag: none;
   }
 }
 
@@ -51,7 +69,7 @@
 
   .glass-light {
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(200px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(0, 0, 0, 0.05);
   }

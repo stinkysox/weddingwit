@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "../src/components/SectionWrapper";
 import { Link } from "react-router-dom";
 
 export const About: React.FC = () => {
+  // State for the main philosophy image toggle
+  const [isImageFocused, setIsImageFocused] = useState(false);
+
   return (
     <div className="bg-white dark:bg-[#050505] text-gray-900 dark:text-white pt-32 pb-24 overflow-hidden">
       {/* Hero Section */}
@@ -29,21 +32,37 @@ export const About: React.FC = () => {
       <section className="max-w-7xl mx-auto px-6 mb-48">
         <div className="grid md:grid-cols-2 gap-24 items-center">
           <SectionWrapper direction="left">
-            {/* MOBILE OPTIMIZATION: whileInView automatically removes grayscale as the user scrolls to the image */}
+            {/* MOBILE OPTIMIZATION: 
+              - onClick toggles the focus state.
+              - onMouseEnter/Leave handles desktop hover.
+            */}
             <motion.div
-              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsImageFocused(!isImageFocused)}
+              onMouseEnter={() => setIsImageFocused(true)}
+              onMouseLeave={() => setIsImageFocused(false)}
               className="aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl relative cursor-pointer"
             >
               <motion.img
-                initial={{ filter: "grayscale(100%)", scale: 1 }}
-                whileInView={{ filter: "grayscale(0%)", scale: 1.05 }}
-                viewport={{ once: false, amount: 0.4 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                animate={{
+                  filter: isImageFocused ? "grayscale(0%)" : "grayscale(100%)",
+                  scale: isImageFocused ? 1.05 : 1,
+                }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 src="https://i.pinimg.com/736x/f5/94/d1/f594d17e5bcd98234cd36a48f5b56a9a.jpg"
                 alt="Architecture"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+
+              {/* Subtle Hint for mobile users */}
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 md:hidden">
+                <motion.p
+                  animate={{ opacity: isImageFocused ? 0 : 1 }}
+                  className="text-[8px] uppercase tracking-widest text-white/50 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full"
+                >
+                  Tap to reveal color
+                </motion.p>
+              </div>
             </motion.div>
           </SectionWrapper>
 
@@ -110,13 +129,12 @@ export const About: React.FC = () => {
               },
             ].map((pillar, i) => (
               <SectionWrapper key={i} delay={i * 0.15}>
-                {/* MOBILE OPTIMIZATION: whileTap provides haptic-like visual feedback on mobile touch */}
                 <motion.div
                   whileHover={{
                     y: -10,
                     backgroundColor: "rgba(255, 255, 255, 0.08)",
                   }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.98 }}
                   className="p-12 glass rounded-[3rem] border border-white/10 h-full transition-colors duration-500 cursor-pointer"
                 >
                   <h4 className="text-3xl font-serif italic mb-6 text-yellow-600">

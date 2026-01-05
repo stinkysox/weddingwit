@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "../src/components/SectionWrapper";
 
@@ -49,27 +49,20 @@ const REVIEWS: Testimonial[] = [
   },
 ];
 
-// Animation Variants
-const cardVariants = {
-  initial: { borderColor: "rgba(255, 255, 255, 0.05)", y: 0 },
-  active: {
-    borderColor: "rgba(202, 138, 4, 0.3)",
-    y: -10,
-    transition: { duration: 0.4 },
-  },
-};
-
-const imageVariants = {
-  initial: { scale: 1 },
-  active: { scale: 1.1, transition: { duration: 0.6 } },
-};
-
-const quoteIconVariants = {
-  initial: { opacity: 0.03, scale: 0.8 },
-  active: { opacity: 0.1, scale: 1, transition: { duration: 0.4 } },
-};
-
 export const Testimonials: React.FC = () => {
+  // Track which card is active for mobile "persistent" tap
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const handleInteraction = (id: string, isClick: boolean) => {
+    if (isClick) {
+      // Toggle logic for mobile taps
+      setActiveId((prev) => (prev === id ? null : id));
+    } else {
+      // Hover logic for desktop
+      setActiveId(id);
+    }
+  };
+
   return (
     <div className="py-40 bg-[#050505] px-6 overflow-hidden">
       <SectionWrapper className="max-w-4xl mx-auto text-center mb-32">
@@ -86,64 +79,84 @@ export const Testimonials: React.FC = () => {
       </SectionWrapper>
 
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
-        {REVIEWS.map((review, idx) => (
-          <SectionWrapper
-            key={review.id}
-            direction={idx % 2 === 0 ? "left" : "right"}
-            delay={idx * 0.1}
-          >
-            {/* MOBILE OPTIMIZATION: 
-              - whileHover handles desktop.
-              - whileTap handles mobile touch (haptic effect).
-              - Removed 'group' and 'group-hover' logic.
-            */}
-            <motion.div
-              initial="initial"
-              whileHover="active"
-              whileTap="active"
-              variants={cardVariants}
-              className="glass rounded-[3rem] p-10 md:p-16 border border-white/5 relative overflow-hidden cursor-default"
+        {REVIEWS.map((review, idx) => {
+          const isActive = activeId === review.id;
+
+          return (
+            <SectionWrapper
+              key={review.id}
+              direction={idx % 2 === 0 ? "left" : "right"}
+              delay={idx * 0.1}
             >
-              <div className="flex items-center gap-6 mb-10 relative z-10">
-                <div className="w-20 h-20 rounded-full overflow-hidden ring-1 ring-white/10 shadow-2xl">
-                  <motion.img
-                    variants={imageVariants}
-                    src={review.imageUrl}
-                    alt={review.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-serif text-white">
-                    {review.name}
-                  </h3>
-                  <p className="text-[10px] text-yellow-600 uppercase tracking-[0.3em] font-bold">
-                    {review.event}
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-xl md:text-2xl italic font-serif leading-relaxed text-gray-400 dark:text-gray-300 relative z-10">
-                "{review.quote}"
-              </p>
-
-              {/* Decorative Quote SVG */}
               <motion.div
-                variants={quoteIconVariants}
-                className="absolute -bottom-8 -right-8 text-white pointer-events-none"
+                // Trigger interaction on click (mobile) and hover (desktop)
+                onClick={() => handleInteraction(review.id, true)}
+                onMouseEnter={() => handleInteraction(review.id, false)}
+                onMouseLeave={() => setActiveId(null)}
+                animate={{
+                  borderColor: isActive
+                    ? "rgba(202, 138, 4, 0.3)"
+                    : "rgba(255, 255, 255, 0.05)",
+                  y: isActive ? -10 : 0,
+                  backgroundColor: isActive
+                    ? "rgba(255, 255, 255, 0.03)"
+                    : "rgba(255, 255, 255, 0)",
+                }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="glass rounded-[3rem] p-10 md:p-16 border relative overflow-hidden cursor-pointer"
               >
-                <svg
-                  width="200"
-                  height="200"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
+                <div className="flex items-center gap-6 mb-10 relative z-10">
+                  <div className="w-20 h-20 rounded-full overflow-hidden ring-1 ring-white/10 shadow-2xl">
+                    <motion.img
+                      animate={{ scale: isActive ? 1.1 : 1 }}
+                      transition={{ duration: 0.6 }}
+                      src={review.imageUrl}
+                      alt={review.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-serif text-white">
+                      {review.name}
+                    </h3>
+                    <motion.p
+                      animate={{ color: isActive ? "#ca8a04" : "#854d0e" }}
+                      className="text-[10px] uppercase tracking-[0.3em] font-bold"
+                    >
+                      {review.event}
+                    </motion.p>
+                  </div>
+                </div>
+
+                <motion.p
+                  animate={{ color: isActive ? "#f3f4f6" : "#9ca3af" }}
+                  className="text-xl md:text-2xl italic font-serif leading-relaxed relative z-10"
                 >
-                  <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H12.017V21H14.017ZM5.017 21L5.017 18C5.017 16.8954 5.91243 16 7.017 16H10.017C10.5693 16 11.017 15.5523 11.017 15V9C11.017 8.44772 10.5693 8 10.017 8H7.017C6.46472 8 6.017 8.44772 6.017 9V12C6.017 12.5523 5.56929 13 5.017 13H3.017V21H5.017Z" />
-                </svg>
+                  "{review.quote}"
+                </motion.p>
+
+                {/* Decorative Quote SVG */}
+                <motion.div
+                  animate={{
+                    opacity: isActive ? 0.1 : 0.03,
+                    scale: isActive ? 1 : 0.8,
+                    rotate: isActive ? 0 : -5,
+                  }}
+                  className="absolute -bottom-8 -right-8 text-white pointer-events-none"
+                >
+                  <svg
+                    width="200"
+                    height="200"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H12.017V21H14.017ZM5.017 21L5.017 18C5.017 16.8954 5.91243 16 7.017 16H10.017C10.5693 16 11.017 15.5523 11.017 15V9C11.017 8.44772 10.5693 8 10.017 8H7.017C6.46472 8 6.017 8.44772 6.017 9V12C6.017 12.5523 5.56929 13 5.017 13H3.017V21H5.017Z" />
+                  </svg>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </SectionWrapper>
-        ))}
+            </SectionWrapper>
+          );
+        })}
       </div>
     </div>
   );
