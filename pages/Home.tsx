@@ -27,13 +27,13 @@ const FEATURED_SHOTS = [
   },
   {
     id: "2",
-    url: "https://i.pinimg.com/1200x/ec/62/1d/ec621d79d0b0d6b1746100e2d98a891f.jpg",
+    url: "https://i.pinimg.com/1200x/3a/d2/cf/3ad2cf6a4a6791043e3ad2905ccb4f26.jpg",
     title: "The Golden Hour",
     date: "2024",
   },
   {
     id: "3",
-    url: "https://i.pinimg.com/1200x/ec/62/1d/ec621d79d0b0d6b1746100e2d98a891f.jpg",
+    url: "https://i.pinimg.com/736x/31/68/b8/3168b8366b5fdc168b262603d2018024.jpg",
     title: "Minimal Elegance",
     date: "2023",
   },
