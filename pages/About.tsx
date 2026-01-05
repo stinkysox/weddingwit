@@ -27,7 +27,7 @@ export const About: React.FC = () => {
           <SectionWrapper direction="left">
             <div className="aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl relative group">
               <img
-                src="https://images.unsplash.com/photo-1590761501625-231a5464d262?auto=format&fit=crop&q=80&w=1200"
+                src="https://i.pinimg.com/736x/f5/94/d1/f594d17e5bcd98234cd36a48f5b56a9a.jpg"
                 alt="Architecture"
                 className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
               />
@@ -154,14 +154,14 @@ export const About: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-[4/5] rounded-[2rem] overflow-hidden translate-y-12">
                 <img
-                  src="https://images.unsplash.com/photo-1544161515-436ceea16598?auto=format&fit=crop&q=80&w=600"
+                  src="https://i.pinimg.com/736x/79/21/c2/7921c220ea25456868c005d8b4ef808c.jpg"
                   alt="Detail 1"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="aspect-[4/5] rounded-[2rem] overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1512101176959-c557f3516787?auto=format&fit=crop&q=80&w=600"
+                  src="https://i.pinimg.com/736x/5f/0e/07/5f0e070f0f88e6d9b78179f74267025a.jpg"
                   alt="Detail 2"
                   className="w-full h-full object-cover"
                 />
