@@ -1,5 +1,5 @@
 import React from "react";
-import { SectionWrapper } from "../components/SectionWrapper";
+import { SectionWrapper } from "../src/components/SectionWrapper";
 interface Testimonial {
   id: string;
   name: string;

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { SectionWrapper } from "../components/SectionWrapper";
+import { SectionWrapper } from "../src/components/SectionWrapper";
 import { Link } from "react-router-dom";
 
 export const About: React.FC = () => {

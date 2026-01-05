@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SectionWrapper } from "../components/SectionWrapper";
+import { SectionWrapper } from "../src/components/SectionWrapper";
 import { GalleryCategory } from "../types";
 import { GALLERY_DATA } from "../assets/gallery";
 

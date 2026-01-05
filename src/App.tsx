@@ -6,15 +6,15 @@ import {
   useLocation,
 } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { ThemeProvider } from "./context/ThemeContext";
+import { ThemeProvider } from "../context/ThemeContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
-import { Home } from "./pages/Home";
-import { About } from "./pages/About";
-import { Gallery } from "./pages/Gallery";
-import { Testimonials } from "./pages/Testimonials";
-import { Book } from "./pages/Book";
-import { Contact } from "./pages/Contact";
+import { Home } from "../pages/Home";
+import { About } from "../pages/About";
+import { Gallery } from "../pages/Gallery";
+import { Testimonials } from "../pages/Testimonials";
+import { Book } from "../pages/Book";
+import { Contact } from "../pages/Contact";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();

@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { SectionWrapper } from "../components/SectionWrapper";
+import { SectionWrapper } from "../src/components/SectionWrapper";
 
 const AuroraBackground = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-60 dark:opacity-40">
